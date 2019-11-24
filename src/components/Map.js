@@ -6,8 +6,9 @@ const DivMap = styled.div`
   width:70%;
 `;
 
-function Map() {
-  const [defaultCoords, setDefaultCoords] = useState({longitude:126.978433,latitude:37.566689});
+function Map({initData}) {
+  const [defaultCoords, setDefaultCoords] = useState({latitude:37.566689,longitude:126.978433});
+  const [hotplaceList, setHotplaceList] = useState(initData)
   const mapContainer = useRef();
 
   useEffect(() => {
@@ -17,10 +18,19 @@ function Map() {
         center: new window.naver.maps.LatLng(latitude, longitude),
         zoom:11,
     });
+    hotplaceList.map(hp=>{
+      const {latitude, longitude} = hp.coords; 
+      return (
+        new window.naver.maps.Marker({
+          position: new window.naver.maps.LatLng(latitude, longitude),
+          map: map
+        })
+      )
+  });
     return () => {
       // console.log('컴포넌트가 화면에서 사라짐');
     };
-  }, []);
+  }, [defaultCoords]);
   
 
   return (
